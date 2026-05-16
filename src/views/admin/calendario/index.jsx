@@ -117,8 +117,13 @@ export default function CalendarioRentas() {
     }, [rentaDetalle]); // Solo se vuelve a calcular cuando cambia rentaDetalle
 
     return (
-        <Box pt={{ base: "130px", md: "80px" }} px="20px" minH="100vh" bg={useColorModeValue("gray.50", "navy.900")}>
-
+        <Box
+            pt={{ base: "110px", md: "80px" }}
+            px={{ base: "10px", md: "20px" }}
+            minH="100vh"
+            overflowX="hidden"
+            bg={useColorModeValue("gray.50", "navy.900")}
+        >
             {/* SECCIÓN INVENTARIO PRO */}
             <Card p="24px" mb="25px" bg={cardBg} border="none" boxShadow="0px 18px 40px rgba(112, 144, 176, 0.12)">
                 <Flex direction={{ base: "column", md: "row" }} justify="space-between" align="center" mb="20px">
@@ -173,10 +178,36 @@ export default function CalendarioRentas() {
                         />
                     </InputGroup>
                 </Flex>
-
-                <HStack spacing="20px" overflowX="auto" pb="15px" className="custom-scrollbar">
+                <HStack
+                    spacing={{ base: "12px", md: "20px" }}
+                    overflowX="auto"
+                    pb="10px"
+                    css={{
+                        "&::-webkit-scrollbar": {
+                            height: "6px",
+                        },
+                        "&::-webkit-scrollbar-thumb": {
+                            background: "#A0AEC0",
+                            borderRadius: "24px",
+                        },
+                    }}
+                >
                     {disponibilidadDia.filter(i => i.nombre.toLowerCase().includes(busqueda.toLowerCase())).map(item => (
-                        <Box key={item.id} minW="220px" p="15px" bg={itemBoxBg} borderRadius="20px" border="1px solid" borderColor={borderCol} transition="transform 0.2s" _hover={{ transform: "translateY(-5px)" }}>
+                        <Box
+                            key={item.id}
+                            minW={{ base: "170px", md: "220px" }}
+                            maxW={{ base: "170px", md: "220px" }}
+                            p={{ base: "12px", md: "15px" }}
+                            bg={itemBoxBg}
+                            borderRadius="20px"
+                            border="1px solid"
+                            borderColor={borderCol}
+                            transition="0.2s"
+                            flexShrink={0}
+                            _hover={{
+                                transform: "translateY(-4px)",
+                            }}
+                        >
                             <HStack mb={3}>
                                 <Image
                                     src={item.foto || 'https://via.placeholder.com/100'}
@@ -201,11 +232,18 @@ export default function CalendarioRentas() {
                     ))}
                 </HStack>
             </Card>
-
-            <SimpleGrid columns={{ base: 1, xl: 4 }} spacing="25px">
+            <SimpleGrid
+                columns={{ base: 1, xl: 4 }}
+                spacing={{ base: "15px", md: "25px" }}
+            >
                 {/* CALENDARIO PREMIUM */}
                 <Card gridColumn={{ xl: "span 3" }} p="0" overflow="hidden" bg={cardBg} border="none" boxShadow="0px 18px 40px rgba(112, 144, 176, 0.12)">
-                    <Flex p="25px" justify="space-between" align="center" borderBottom="1px solid" borderColor={borderCol}>
+                    <Flex
+                        p={{ base: "15px", md: "25px" }}
+                        justify="space-between"
+                        align={{ base: "start", md: "center" }}
+                        direction={{ base: "column", md: "row" }}
+                        gap={4} borderBottom="1px solid" borderColor={borderCol}>
                         <HStack spacing={4}>
                             <Icon as={MdCalendarMonth} w="24px" h="24px" color={brandColor} />
                             <Text fontSize="22px" fontWeight="800" color={textColor}>{mesesLabels[mesActual]} {anioActual}</Text>
@@ -216,81 +254,90 @@ export default function CalendarioRentas() {
                             <IconButton variant="ghost" icon={<MdChevronRight />} onClick={() => setFechaReferencia(new Date(anioActual, mesActual + 1, 1))} />
                         </HStack>
                     </Flex>
-
-                    <SimpleGrid columns={7}>
-                        {["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"].map(d => (
-                            <Text key={d} textAlign="center" py="15px" fontWeight="800" fontSize="xs" color="secondaryGray.500" textTransform="uppercase" letterSpacing="1px">{d.substring(0, 3)}</Text>
-                        ))}
-                        {diasDelCalendario.map((dia, idx) => {
-                            if (dia.vacio) return <Box key={`v-${idx}`} h="130px" bg={emptyDayBg} opacity="0.4" borderRight="1px solid" borderBottom="1px solid" borderColor={borderCol} />;
-                            const esSeleccionado = dia.fechaISO === diaSeleccionado;
-                            const rentas = getRentasDelDia(dia.fechaISO);
-                            return (
-                                <Box
-                                    key={dia.fechaISO}
-                                    h="130px"
-                                    borderRight="1px solid"
-                                    borderBottom="1px solid"
-                                    borderColor={borderCol}
-                                    cursor="pointer"
-                                    onClick={() => setDiaSeleccionado(dia.fechaISO)}
-                                    position="relative"
-                                    transition="all 0.2s cubic-bezier(0.4, 0, 0.2, 1)"
-                                    // --- ESTILOS DE RESALTADO PREMIUM ---
-                                    bg={esSeleccionado ? cellSelectedBg : "transparent"}
-                                    boxShadow={esSeleccionado ? `inset 0 0 0 2px ${brandColor}, 0px 10px 20px rgba(0,0,0,0.05)` : "none"}
-                                    zIndex={esSeleccionado ? "1" : "0"}
-                                    _hover={{ bg: esSeleccionado ? cellSelectedBg : hoverBg, transform: "scale(1.01)" }}
-                                >
-                                    <Flex justify="space-between" m="10px" align="center">
-                                        <Text
-                                            fontWeight={esSeleccionado ? "900" : "800"}
-                                            fontSize={esSeleccionado ? "md" : "sm"}
-                                            color={esSeleccionado ? brandColor : textColor}
-                                            transition="all 0.2s"
+                    <Box overflowX="auto">
+                        <Box minW={{ base: "900px", md: "100%" }}>
+                            <SimpleGrid columns={7}>
+                                {["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"].map(d => (
+                                    <Text key={d} textAlign="center" py="15px" fontWeight="800" fontSize="xs" color="secondaryGray.500" textTransform="uppercase" letterSpacing="1px">{d.substring(0, 3)}</Text>
+                                ))}
+                                {diasDelCalendario.map((dia, idx) => {
+                                    if (dia.vacio) return <Box key={`v-${idx}`} h={{ base: "90px", md: "130px" }} bg={emptyDayBg} opacity="0.4" borderRight="1px solid" borderBottom="1px solid" borderColor={borderCol} />;
+                                    const esSeleccionado = dia.fechaISO === diaSeleccionado;
+                                    const rentas = getRentasDelDia(dia.fechaISO);
+                                    return (
+                                        <Box
+                                            key={dia.fechaISO}
+                                            h="130px"
+                                            borderRight="1px solid"
+                                            borderBottom="1px solid"
+                                            borderColor={borderCol}
+                                            cursor="pointer"
+                                            onClick={() => setDiaSeleccionado(dia.fechaISO)}
+                                            position="relative"
+                                            transition="all 0.2s cubic-bezier(0.4, 0, 0.2, 1)"
+                                            // --- ESTILOS DE RESALTADO PREMIUM ---
+                                            bg={esSeleccionado ? cellSelectedBg : "transparent"}
+                                            boxShadow={esSeleccionado ? `inset 0 0 0 2px ${brandColor}, 0px 10px 20px rgba(0,0,0,0.05)` : "none"}
+                                            zIndex={esSeleccionado ? "1" : "0"}
+                                            _hover={{ bg: esSeleccionado ? cellSelectedBg : hoverBg, transform: "scale(1.01)" }}
                                         >
-                                            {dia.numero}
-                                        </Text>
-                                        {esSeleccionado && (
-                                            <Box boxSize="6px" bg={brandColor} borderRadius="full" shadow={`0 0 8px ${brandColor}`} />
-                                        )}
-                                        {!esSeleccionado && rentas.length > 0 && (
-                                            <Badge variant="subtle" colorScheme="brand" borderRadius="full" fontSize="10px" px={1.5}>
-                                                {rentas.length}
-                                            </Badge>
-                                        )}
-                                    </Flex>
-                                    <VStack spacing="3px" px="4px" align="stretch">
-                                        {rentas.slice(0, 3).map(r => {
-                                            const esInicio = dia.fechaISO === r.fecha_inicio;
-                                            const esFin = dia.fechaISO === r.fecha_fin;
-                                            return (
-                                                <Tooltip key={r.id} label={`${r.cliente?.nombre} - #${r.id}`} fontSize="xs">
-                                                    <Box
-                                                        h="20px" w="100%" bg={getRentaColor(r.id)}
-                                                        borderRadius={esInicio ? "6px 0 0 6px" : esFin ? "0 6px 6px 0" : "0"}
-                                                        onClick={(e) => { e.stopPropagation(); abrirDetalle(r); }}
-                                                        boxShadow="sm" _hover={{ filter: "brightness(1.1)" }}
-                                                    >
-                                                        {(esInicio || dia.numero === 1 || idx % 7 === 0) && (
-                                                            <Text fontSize="10px" px="6px" color="white" fontWeight="800" lineHeight="20px" isTruncated>
-                                                                {r.cliente?.nombre}
-                                                            </Text>
-                                                        )}
-                                                    </Box>
-                                                </Tooltip>
-                                            );
-                                        })}
-                                        {rentas.length > 3 && <Text fontSize="10px" textAlign="center" color={textColorSecondary} fontWeight="bold">+{rentas.length - 3} más</Text>}
-                                    </VStack>
-                                </Box>
-                            );
-                        })}
-                    </SimpleGrid>
+                                            <Flex justify="space-between" m="10px" align="center">
+                                                <Text
+                                                    fontWeight={esSeleccionado ? "900" : "800"}
+                                                    fontSize={{
+                                                        base: esSeleccionado ? "sm" : "xs",
+                                                        md: esSeleccionado ? "md" : "sm"
+                                                    }}
+                                                    color={esSeleccionado ? brandColor : textColor}
+                                                    transition="all 0.2s"
+                                                >
+                                                    {dia.numero}
+                                                </Text>
+                                                {esSeleccionado && (
+                                                    <Box boxSize="6px" bg={brandColor} borderRadius="full" shadow={`0 0 8px ${brandColor}`} />
+                                                )}
+                                                {!esSeleccionado && rentas.length > 0 && (
+                                                    <Badge variant="subtle" colorScheme="brand" borderRadius="full" fontSize="10px" px={1.5}>
+                                                        {rentas.length}
+                                                    </Badge>
+                                                )}
+                                            </Flex>
+                                            <VStack spacing="3px" px="4px" align="stretch">
+                                                {rentas.slice(0, 3).map(r => {
+                                                    const esInicio = dia.fechaISO === r.fecha_inicio;
+                                                    const esFin = dia.fechaISO === r.fecha_fin;
+                                                    return (
+                                                        <Tooltip key={r.id} label={`${r.cliente?.nombre} - #${r.id}`} fontSize="xs">
+                                                            <Box
+                                                                h="20px" w="100%" bg={getRentaColor(r.id)}
+                                                                borderRadius={esInicio ? "6px 0 0 6px" : esFin ? "0 6px 6px 0" : "0"}
+                                                                onClick={(e) => { e.stopPropagation(); abrirDetalle(r); }}
+                                                                boxShadow="sm" _hover={{ filter: "brightness(1.1)" }}
+                                                            >
+                                                                {(esInicio || dia.numero === 1 || idx % 7 === 0) && (
+                                                                    <Text fontSize="10px" px="6px" color="white" fontWeight="800" lineHeight="20px" isTruncated>
+                                                                        {r.cliente?.nombre}
+                                                                    </Text>
+                                                                )}
+                                                            </Box>
+                                                        </Tooltip>
+                                                    );
+                                                })}
+                                                {rentas.length > 3 && <Text fontSize="10px" textAlign="center" color={textColorSecondary} fontWeight="bold">+{rentas.length - 3} más</Text>}
+                                            </VStack>
+                                        </Box>
+                                    );
+                                })}
+                            </SimpleGrid>
+                        </Box>
+                    </Box>
                 </Card>
 
                 {/* AGENDA LATERAL PREMIUM */}
-                <Card p="25px" bg={cardBg} border="none" boxShadow="0px 18px 40px rgba(112, 144, 176, 0.12)">
+                <Card
+                    p={{ base: "15px", md: "25px" }}
+                    borderRadius={{ base: "20px", md: "24px" }}
+                    bg={cardBg} border="none" boxShadow="0px 18px 40px rgba(112, 144, 176, 0.12)">
                     <Text fontWeight="800" fontSize="lg" mb="20px" color={textColor}>Agenda del Día</Text>
                     <VStack align="stretch" spacing={4}>
                         {eventosDelDia.map(e => (
@@ -325,7 +372,8 @@ export default function CalendarioRentas() {
             </SimpleGrid>
 
             {/* MODAL DETALLE PREMIUM (ESTILO RECIBO) */}
-            <Modal isOpen={isOpen} onClose={onClose} size="lg" isCentered>
+            <Modal isOpen={isOpen} onClose={onClose} size={{ base: "full", md: "lg" }}
+                scrollBehavior="inside" isCentered>
                 <ModalOverlay backdropFilter="blur(10px) saturate(180%)" />
                 <ModalContent borderRadius="30px" bg={cardBg} overflow="hidden" boxShadow="0px 25px 50px rgba(0,0,0,0.2)">
                     {/* Línea decorativa superior dinámica */}
@@ -387,7 +435,7 @@ export default function CalendarioRentas() {
                                 <Box>
                                     <Text fontWeight="800" fontSize="md" mb={3} ml={1}>Artículos en Renta</Text>
                                     <Box borderRadius="15px" border="1px solid" borderColor={tableHeaderBg} overflow="hidden">
-                                        <Table size="sm" variant="simple">
+                                        <Table size={{ base: "xs", md: "sm" }} variant="simple">
                                             <Thead bg={tableHeaderBg}>
                                                 <Tr>
                                                     <Th py={3} color="gray.500">Producto</Th>

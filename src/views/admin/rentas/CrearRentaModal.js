@@ -437,13 +437,32 @@ export default function CrearRentaWizard({ isOpen, onClose, onCrear, rentaSelecc
         }
     };
     return (
-        <Modal isOpen={isOpen} onClose={onClose} size="6xl" motionPreset="slideInBottom">
+        <Modal
+            isOpen={isOpen}
+            onClose={onClose}
+            size={{ base: "full", md: "6xl" }}
+            motionPreset="slideInBottom"
+            scrollBehavior="inside"
+        >
             <ModalOverlay backdropFilter="blur(10px)" bg="blackAlpha.700" />
-            <ModalContent bg="gray.50" borderRadius="0">
+            <ModalContent
+                bg="gray.50"
+                borderRadius={{ base: "0", md: "2xl" }}
+                h={{ base: "100vh", md: "auto" }}
+                maxH="100vh"
+                overflow="hidden"
+                m={{ base: 0, md: 4 }}
+            >
 
                 {/* --- HEADER --- */}
                 <ModalHeader bg="white" borderBottom="1px solid" borderColor="gray.200" py={5}>
-                    <Flex justify="space-between" align="center" px={6}>
+                    <Flex
+                        justify="space-between"
+                        align={{ base: "start", lg: "center" }}
+                        direction={{ base: "column", lg: "row" }}
+                        gap={{ base: 4, lg: 0 }}
+                        px={{ base: 3, md: 6 }}
+                    >
                         <HStack spacing={4}>
                             <Box bg={isViewMode ? "orange.500" : "teal.500"} p={2} borderRadius="lg" color="white">
                                 <Icon as={isViewMode ? FaEye : FaPlus} w={6} h={6} />
@@ -460,14 +479,17 @@ export default function CrearRentaWizard({ isOpen, onClose, onCrear, rentaSelecc
                             {[1, 2, 3, 4, 5].map((num) => (
                                 <VStack key={num} spacing={1}>
                                     <CircleStep num={num} activo={paso >= num} actual={paso === num} color={isViewMode ? "orange" : "teal"} />
-                                    <Text fontSize="10px" fontWeight="bold" color={paso >= num ? (isViewMode ? "orange.600" : "teal.600") : "gray.400"}>
+                                    <Text display={{ base: "none", md: "block" }} fontSize="10px" fontWeight="bold" color={paso >= num ? (isViewMode ? "orange.600" : "teal.600") : "gray.400"}>
                                         {num === 1 ? "CLIENTE" : num === 2 ? "FECHAS" : num === 3 ? "EQUIPO" : num === 4 ? "PAGO" : "FINAL"}
                                     </Text>
                                 </VStack>
                             ))}
                         </HStack>
-
-                        <HStack spacing={3}>
+                        <HStack
+                            spacing={3}
+                            w={{ base: "full", lg: "auto" }}
+                            justify={{ base: "space-between", lg: "flex-end" }}
+                        >
                             {isViewMode && (
                                 <Button leftIcon={<FaFilePdf />} colorScheme="red" variant="solid" onClick={() => generarPDF()}>
                                     DESCARGAR PDF
@@ -482,7 +504,13 @@ export default function CrearRentaWizard({ isOpen, onClose, onCrear, rentaSelecc
                     <Grid templateColumns="repeat(12, 1fr)" h="calc(100vh - 180px)">
 
                         {/* Area Principal */}
-                        <GridItem colSpan={{ base: 12, lg: 8 }} p={12} overflowY="auto" bg="gray.50">
+                        <GridItem
+                            colSpan={{ base: 12, lg: 8 }}
+                            p={{ base: 4, md: 8, lg: 12 }}
+                            overflowY="auto"
+                            maxH={{ base: "auto", lg: "calc(100vh - 180px)" }}
+                            bg="gray.50"
+                        >
                             <AnimatePresence mode="wait">
                                 <motion.div key={paso} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
                                     <Box maxW="850px" mx="auto">
@@ -507,33 +535,65 @@ export default function CrearRentaWizard({ isOpen, onClose, onCrear, rentaSelecc
                         {/* Sidebar Carrito */}
                         <GridItem
                             colSpan={{ base: 12, lg: 4 }}
+                            order={{ base: 2, lg: 1 }}
                             bg="white"
-                            p={8}
+                            p={{ base: 3, md: 6, lg: 8 }}
+                            maxH={{ base: "320px", lg: "none" }}
                             borderLeft="1px solid"
                             borderColor="gray.100"
                             position="relative"
+                            overflow="hidden"
                         >
-                            <VStack align="stretch" h="full" spacing={6}>
+                            <VStack
+                                align="stretch"
+                                h="full"
+                                spacing={{ base: 3, md: 6 }}
+                            >
+
                                 {/* --- CABECERA DEL CARRITO --- */}
                                 <Flex justify="space-between" align="center">
-                                    <HStack spacing={3}>
-                                        <Center bg="teal.50" p={2} borderRadius="xl">
-                                            <Icon as={FaShoppingCart} color="teal.600" w={5} h={5} />
+                                    <HStack spacing={{ base: 2, md: 3 }}>
+                                        <Center
+                                            bg="teal.50"
+                                            p={{ base: 1.5, md: 2 }}
+                                            borderRadius="xl"
+                                        >
+                                            <Icon
+                                                as={FaShoppingCart}
+                                                color="teal.600"
+                                                w={{ base: 4, md: 5 }}
+                                                h={{ base: 4, md: 5 }}
+                                            />
                                         </Center>
+
                                         <VStack align="start" spacing={0}>
-                                            <Text fontWeight="900" fontSize="lg" letterSpacing="tight" color="gray.800">
+                                            <Text
+                                                fontWeight="900"
+                                                fontSize={{ base: "md", md: "lg" }}
+                                                letterSpacing="tight"
+                                                color="gray.800"
+                                            >
                                                 RESUMEN
                                             </Text>
-                                            <Text fontSize="xs" color="gray.400" fontWeight="bold">ORDEN DE SERVICIO</Text>
+
+                                            <Text
+                                                display={{ base: "none", md: "block" }}
+                                                fontSize="xs"
+                                                color="gray.400"
+                                                fontWeight="bold"
+                                            >
+                                                ORDEN DE SERVICIO
+                                            </Text>
                                         </VStack>
                                     </HStack>
+
                                     <Badge
                                         variant="subtle"
                                         colorScheme="teal"
                                         borderRadius="lg"
-                                        px={3}
+                                        px={{ base: 2, md: 3 }}
                                         py={1}
-                                        fontSize="sm"
+                                        fontSize={{ base: "10px", md: "sm" }}
                                         fontWeight="black"
                                     >
                                         {carrito.length} {carrito.length === 1 ? 'ITEM' : 'ITEMS'}
@@ -545,13 +605,22 @@ export default function CrearRentaWizard({ isOpen, onClose, onCrear, rentaSelecc
                                     align="stretch"
                                     flex={1}
                                     overflowY="auto"
-                                    spacing={3}
-                                    pr={2}
+                                    spacing={{ base: 2, md: 3 }}
+                                    pr={1}
                                     sx={{
-                                        '&::-webkit-scrollbar': { width: '4px' },
-                                        '&::-webkit-scrollbar-track': { background: 'transparent' },
-                                        '&::-webkit-scrollbar-thumb': { background: 'gray.100', borderRadius: '10px' },
-                                        '&:hover::-webkit-scrollbar-thumb': { background: 'gray.200' }
+                                        '&::-webkit-scrollbar': {
+                                            width: '4px'
+                                        },
+                                        '&::-webkit-scrollbar-track': {
+                                            background: 'transparent'
+                                        },
+                                        '&::-webkit-scrollbar-thumb': {
+                                            background: '#E2E8F0',
+                                            borderRadius: '10px'
+                                        },
+                                        '&:hover::-webkit-scrollbar-thumb': {
+                                            background: '#CBD5E0'
+                                        }
                                     }}
                                 >
                                     {carrito.length > 0 ? (
@@ -560,56 +629,137 @@ export default function CrearRentaWizard({ isOpen, onClose, onCrear, rentaSelecc
                                                 key={item.id}
                                                 item={item}
                                                 onUpdate={actualizarItemCarrito}
-                                                onDelete={(id) => setCarrito(carrito.filter(i => i.id !== id))}
+                                                onDelete={(id) =>
+                                                    setCarrito(carrito.filter(i => i.id !== id))
+                                                }
                                             />
                                         ))
                                     ) : (
-                                        <Center flex={1} flexDir="column" opacity={0.3}>
-                                            <Icon as={FaBoxOpen} w={12} h={12} mb={2} />
-                                            <Text fontWeight="bold">Carrito vacío</Text>
+                                        <Center
+                                            flex={1}
+                                            flexDir="column"
+                                            opacity={0.3}
+                                            py={6}
+                                        >
+                                            <Icon
+                                                as={FaBoxOpen}
+                                                w={{ base: 8, md: 12 }}
+                                                h={{ base: 8, md: 12 }}
+                                                mb={2}
+                                            />
+
+                                            <Text
+                                                fontWeight="bold"
+                                                fontSize={{ base: "sm", md: "md" }}
+                                            >
+                                                Carrito vacío
+                                            </Text>
                                         </Center>
                                     )}
                                 </VStack>
 
-                                {/* --- SECCIÓN DE TOTALES TIPO TICKET --- */}
+                                {/* --- SECCIÓN DE TOTALES --- */}
                                 <Box
                                     bg="gray.50"
-                                    p={6}
-                                    borderRadius="3xl"
+                                    p={{ base: 3, md: 6 }}
+                                    borderRadius={{ base: "2xl", md: "3xl" }}
                                     border="1px solid"
                                     borderColor="gray.100"
                                 >
-                                    <VStack spacing={3} mb={6}>
+                                    <VStack
+                                        spacing={{ base: 2, md: 3 }}
+                                        mb={{ base: 4, md: 6 }}
+                                    >
+
                                         <Flex justify="space-between" w="full">
-                                            <Text color="gray.500" fontSize="sm" fontWeight="medium">Subtotal Equipo</Text>
-                                            <Text fontWeight="bold" color="gray.700">${subtotal.toLocaleString()}</Text>
+                                            <Text
+                                                color="gray.500"
+                                                fontSize={{ base: "xs", md: "sm" }}
+                                                fontWeight="medium"
+                                            >
+                                                Subtotal Equipo
+                                            </Text>
+
+                                            <Text
+                                                fontWeight="bold"
+                                                color="gray.700"
+                                                fontSize={{ base: "sm", md: "md" }}
+                                            >
+                                                ${subtotal.toLocaleString()}
+                                            </Text>
                                         </Flex>
 
                                         {pago.anticipo > 0 && (
                                             <Flex justify="space-between" w="full">
-                                                <Text color="teal.500" fontSize="sm" fontWeight="medium">Anticipo recibido</Text>
-                                                <Text fontWeight="bold" color="teal.600">-${pago.anticipo.toLocaleString()}</Text>
+                                                <Text
+                                                    color="teal.500"
+                                                    fontSize={{ base: "xs", md: "sm" }}
+                                                    fontWeight="medium"
+                                                >
+                                                    Anticipo recibido
+                                                </Text>
+
+                                                <Text
+                                                    fontWeight="bold"
+                                                    color="teal.600"
+                                                    fontSize={{ base: "sm", md: "md" }}
+                                                >
+                                                    -${pago.anticipo.toLocaleString()}
+                                                </Text>
                                             </Flex>
                                         )}
 
-                                        <Divider borderColor="gray.200" borderStyle="dashed" />
+                                        <Divider
+                                            borderColor="gray.200"
+                                            borderStyle="dashed"
+                                        />
 
-                                        <Flex justify="space-between" w="full" align="center" pt={2}>
+                                        <Flex
+                                            justify="space-between"
+                                            w="full"
+                                            align="center"
+                                            pt={2}
+                                            gap={2}
+                                        >
                                             <VStack align="start" spacing={0}>
-                                                <Text fontSize="xs" fontWeight="black" color="gray.400" textTransform="uppercase">Total a Pagar</Text>
-                                                <Text fontSize="3xl" fontWeight="900" color="gray.800" lineHeight="1">
+                                                <Text
+                                                    fontSize="10px"
+                                                    fontWeight="black"
+                                                    color="gray.400"
+                                                    textTransform="uppercase"
+                                                >
+                                                    Total a Pagar
+                                                </Text>
+
+                                                <Text
+                                                    fontSize={{ base: "xl", md: "3xl" }}
+                                                    fontWeight="900"
+                                                    color="gray.800"
+                                                    lineHeight="1"
+                                                >
                                                     ${(subtotal).toLocaleString()}
                                                 </Text>
                                             </VStack>
+
                                             {saldoPendiente > 0 && paso > 3 && (
-                                                <Badge colorScheme="red" variant="solid" borderRadius="md" fontSize="10px">
-                                                    PENDIENTE: ${saldoPendiente.toLocaleString()}
+                                                <Badge
+                                                    colorScheme="red"
+                                                    variant="solid"
+                                                    borderRadius="md"
+                                                    fontSize="10px"
+                                                    px={2}
+                                                    py={1}
+                                                    textAlign="center"
+                                                >
+                                                    PENDIENTE:
+                                                    <br />
+                                                    ${saldoPendiente.toLocaleString()}
                                                 </Badge>
                                             )}
                                         </Flex>
                                     </VStack>
 
-                                    {/* --- BOTONES DE ACCIÓN --- */}
+                                    {/* --- BOTONES --- */}
                                     <HStack spacing={3}>
                                         {paso > 1 && (
                                             <IconButton
@@ -617,27 +767,57 @@ export default function CrearRentaWizard({ isOpen, onClose, onCrear, rentaSelecc
                                                 onClick={() => setPaso(paso - 1)}
                                                 variant="ghost"
                                                 size="lg"
-                                                h="60px"
-                                                w="60px"
+                                                h={{ base: "45px", md: "60px" }}
+                                                w={{ base: "45px", md: "60px" }}
                                                 borderRadius="2xl"
                                                 _hover={{ bg: "gray.200" }}
                                             />
                                         )}
+
                                         <Button
-                                            colorScheme={isViewMode && paso === 5 ? "orange" : "teal"}
+                                            colorScheme={
+                                                isViewMode && paso === 5
+                                                    ? "orange"
+                                                    : "teal"
+                                            }
                                             size="lg"
                                             w="full"
-                                            h="60px"
+                                            h={{ base: "45px", md: "60px" }}
                                             borderRadius="2xl"
                                             shadow={paso === 5 ? "xl" : "md"}
-                                            rightIcon={paso === 5 ? (isViewMode ? <FaSave /> : <FaCheckCircle />) : <FaChevronRight />}
-                                            onClick={paso === 5 ? handleFinalizar : handleSiguiente}
+                                            rightIcon={
+                                                paso === 5
+                                                    ? (
+                                                        isViewMode
+                                                            ? <FaSave />
+                                                            : <FaCheckCircle />
+                                                    )
+                                                    : <FaChevronRight />
+                                            }
+                                            onClick={
+                                                paso === 5
+                                                    ? handleFinalizar
+                                                    : handleSiguiente
+                                            }
                                             isLoading={loading}
-                                            _hover={{ transform: "translateY(-2px)", shadow: "lg" }}
+                                            _hover={{
+                                                transform: "translateY(-2px)",
+                                                shadow: "lg"
+                                            }}
                                             transition="all 0.2s"
                                         >
-                                            <Text fontSize="md" fontWeight="black" letterSpacing="wider">
-                                                {paso === 5 ? (isViewMode ? "GUARDAR" : "FINALIZAR") : "CONTINUAR"}
+                                            <Text
+                                                fontSize={{ base: "xs", md: "md" }}
+                                                fontWeight="black"
+                                                letterSpacing="wider"
+                                            >
+                                                {paso === 5
+                                                    ? (
+                                                        isViewMode
+                                                            ? "GUARDAR"
+                                                            : "FINALIZAR"
+                                                    )
+                                                    : "CONTINUAR"}
                                             </Text>
                                         </Button>
                                     </HStack>
